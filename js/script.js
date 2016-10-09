@@ -18,14 +18,13 @@ var groups = [1, 2, 3, 4, 5, 6];
 
 function refreshList() {
     "use strict";
-    var html, number;
+    var html = "", number = 0;
     if (groups.length === 0) {
         html += "<p>Pleade add groupnames!</p>";
         $("#shuffle").hide();
         $("#reset").hide();
     } else {
         html += "<ul>";
-        number = 0;
         $.each(groups, function () {
             html += "<li id='" + number + "'>" +	this + "</li>";
             number++;
@@ -41,9 +40,7 @@ function refreshList() {
 
 function show(random) {
     "use strict";
-    var groupsHtml, i, secondNumber;
-    
-    groupsHtml = "<ul>";
+    var groupsHtml = "<ul>", i, secondNumber;
     
     for (i = 0; i < groups.length; i++) {
         secondNumber = i + random;
@@ -59,6 +56,25 @@ function show(random) {
     $("#joinGroups").show();
 }
 
+function shuffle(array) {
+    "use strict";
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+}
 
 /****
 *
@@ -83,6 +99,7 @@ $("#shuffle").click(function () {
     if (groups.length <= 2) {
         alert("Please add more than two groups!");
     } else {
+        shuffle(groups);
         length = groups.length - 1;
         random = 0;
         while (random === 0) {
@@ -97,6 +114,8 @@ $("#reset").click(function () {
     groups = [];
     refreshList();
 });
+
+
 
 
 /****
