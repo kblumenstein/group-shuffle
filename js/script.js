@@ -19,9 +19,11 @@ var groups = [1, 2, 3, 4, 5, 6];
 function refreshList() {
     "use strict";
     var html = "", number = 0;
+    
     if (groups.length === 0) {
         html += "<p>Pleade add groupnames!</p>";
         $("#shuffle").hide();
+        $("#pair").hide();
         $("#reset").hide();
     } else {
         html += "<ul>";
@@ -31,8 +33,13 @@ function refreshList() {
         });
 
         html += "</ul>";
-        
-        $("#shuffle").show();
+        if(groups.length === 1){
+            $("#shuffle").hide();
+            $("#pair").hide();
+        } else{
+            $("#shuffle").show();
+            $("#pair").show();
+        }
         $("#reset").show();
     }
     $("#groups").html(html);
@@ -76,6 +83,39 @@ function shuffle(array) {
     return array;
 }
 
+function pair(array) {
+    "use strict";
+
+    var groupsHtml = "<ul>", i, secondNumber;
+
+    array.sort(function() { return 0.5 - Math.random(); }); // shuffle arrays
+
+    var length;
+
+    if(array.length % 2 != 0){
+        length = (array.length - 1) / 2; 
+    }else{
+        length =  array.length / 2;
+    }
+    console.log(array);
+    
+    for (let index = 0; index < length - 1; index++) {
+        const element = array[index];
+        groupsHtml += "<li>" + array[index] + " => " + array[index + length] + "</li>";
+    }
+
+    groupsHtml += "<li>" + array[length - 1] + " => " + array[(length - 1) + length];
+
+    if(array.length % 2 != 0){
+        groupsHtml += " & " + array[(length - 1) + length + 1];
+    }
+
+    groupsHtml += "</li>";
+
+    $("#groupJoin").html(groupsHtml);
+    $("#joinGroups").show();
+}
+
 /****
 *
 * On Klick
@@ -106,6 +146,17 @@ $("#shuffle").click(function () {
             random = Math.floor(Math.random() * length);
         }
         show(random);
+    }
+});
+
+$("#pair").click(function () {
+    "use strict";
+    var length, random;
+    
+    if (groups.length <= 1) {
+        alert("Please add more than one group!");
+    } else {
+        pair(groups);
     }
 });
 
